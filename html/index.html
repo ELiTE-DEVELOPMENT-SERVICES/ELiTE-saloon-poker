@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Saloon Blackjack</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app" class="hidden">
+    <div class="table-felt">
+      <div class="hud">
+        <div class="balance">Cash: $<span id="balance">0</span></div>
+        <div class="bet-display">Bet: $<span id="currentBet">0</span></div>
+      </div>
+
+      <div class="hand dealer-hand">
+        <div class="hand-label">Dealer <span id="dealerTotal"></span></div>
+        <div id="dealerCards" class="cards"></div>
+      </div>
+
+      <div class="hand player-hand">
+        <div class="hand-label">You <span id="playerTotal"></span></div>
+        <div id="playerCards" class="cards"></div>
+      </div>
+
+      <div id="betPanel" class="panel">
+        <input id="betInput" type="number" min="5" max="500" step="5" value="25">
+        <button id="placeBetBtn">Place Bet</button>
+      </div>
+
+      <div id="actionPanel" class="panel hidden">
+        <button id="hitBtn">Hit</button>
+        <button id="standBtn">Stand</button>
+        <button id="doubleBtn">Double</button>
+      </div>
+
+      <div id="resultBanner" class="banner hidden"></div>
+
+      <button id="closeBtn" class="close-btn">Leave Table (ESC)</button>
+      <div class="dev-credit">Elite Development</div>
+    </div>
+  </div>
+<script src="script.js"></script>
+</body>
+</html>

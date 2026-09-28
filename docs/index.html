@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Saloon Poker — Demo Reel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rye&family=Arvo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #150a0c;
+    --wine: #4a1620;
+    --wine-2: #2c0d14;
+    --lantern: #e8a548;
+    --parchment: #ead9b8;
+    --parchment-dim: #b9a887;
+    --brass: #b8863d;
+    --brass-dim: #7a5c2b;
+    --felt: #1f4d33;
+    --felt-2: #0a1f13;
+    --good: #7bb661;
+    --bad: #a13d3d;
+  }
+  :root:not([data-theme="light"]) { color-scheme: dark; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; } }
+  :root[data-theme="dark"] { color-scheme: dark; }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; width: 100%; height: 100%;
+    background: var(--ink);
+    font-family: 'Arvo', Georgia, serif;
+    overflow: hidden;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  .hidden { display: none !important; }
+  button { font-family: inherit; cursor: pointer; }
+
+  #stage {
+    position: relative; width: 100%; height: 100%; overflow: hidden;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 18%, rgba(232,165,72,0.18) 0%, transparent 65%),
+      linear-gradient(180deg, #2c141a 0%, #1c0c11 55%, #100609 100%);
+  }
+  #stage::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.25) 0 2px, transparent 2px 90px);
+    opacity: 0.4; pointer-events: none;
+  }
+  .glow {
+    position: absolute; top: 4%; left: 50%; transform: translateX(-50%);
+    width: 260px; height: 260px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,165,72,0.35) 0%, transparent 70%);
+    filter: blur(6px); pointer-events: none;
+  }
+
+  #brand {
+    position: absolute; top: 18px; left: 22px; z-index: 50;
+    font-family: 'Rye', serif; color: var(--parchment-dim); font-size: 15px;
+    letter-spacing: 1px; opacity: 0.85; text-shadow: 0 2px 6px rgba(0,0,0,0.8); pointer-events: none;
+  }
+  #brand span { color: var(--lantern); }
+
+  /* ---------- title ---------- */
+  #titleCard {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; padding: 24px;
+    transition: opacity 600ms ease; z-index: 40;
+  }
+  #titleCard.hide { opacity: 0; pointer-events: none; }
+  #titleCard h1 {
+    font-family: 'Rye', serif; color: var(--lantern); font-size: clamp(30px, 5vw, 50px);
+    margin: 0 0 8px; text-shadow: 0 3px 0 rgba(0,0,0,0.5), 0 0 40px rgba(232,165,72,0.25);
+  }
+  #titleCard .sub { color: var(--parchment-dim); font-size: 14px; letter-spacing: 3px; margin-bottom: 30px; }
+  .btn {
+    background: linear-gradient(#8a5a2b, #5c3a1a); border: 1px solid var(--brass-dim);
+    color: #ffe9b8; padding: 13px 26px; border-radius: 4px; font-size: 15px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+  }
+  .btn:hover { filter: brightness(1.15); }
+  .btn.ghost { background: transparent; border: 1px solid var(--brass-dim); color: var(--parchment-dim); }
+  .btn.small { padding: 8px 16px; font-size: 13px; }
+  .actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+  /* ---------- prompt ---------- */
+  .prompt {
+    position: absolute; bottom: 16%; left: 50%; transform: translateX(-50%);
+    color: var(--parchment); background: rgba(10,8,5,0.55); border: 1px solid var(--brass-dim);
+    padding: 10px 20px; border-radius: 3px; font-size: 15px; opacity: 0; transition: opacity 500ms ease;
+  }
+  .prompt.show { opacity: 1; }
+  .prompt kbd { background: var(--brass); color: #241708; padding: 1px 7px; border-radius: 3px; font-weight: bold; }
+
+  /* ---------- table ---------- */
+  .panel-wrap {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    opacity: 0; transform: scale(0.96); transition: opacity 450ms ease, transform 450ms ease; pointer-events: none;
+  }
+  .panel-wrap.show { opacity: 1; transform: scale(1); pointer-events: auto; }
+  .felt-table {
+    width: min(640px, 90vw);
+    background: radial-gradient(ellipse at center, var(--felt) 0%, var(--felt-2) 75%);
+    border: 10px solid #3a2414; border-radius: 22px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.7), inset 0 0 70px rgba(0,0,0,0.5);
+    padding: 26px; color: var(--parchment);
+  }
+  .felt-hud { display: flex; justify-content: space-between; font-size: 17px; color: var(--lantern); margin-bottom: 14px; }
+  .felt-hud .label { color: var(--parchment-dim); font-size: 13px; margin-right: 4px; }
+  .hand-label { font-size: 13px; letter-spacing: 2px; color: var(--parchment-dim); margin-bottom: 6px; }
+  .cards { display: flex; gap: 8px; min-height: 84px; margin-bottom: 18px; }
+  .card {
+    width: 54px; height: 76px; background: #fdf6e3; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.5); border: 1px solid #c9b98a; animation: dealIn 340ms ease;
+  }
+  @keyframes dealIn { from { transform: translateY(-24px) rotate(-6deg); opacity: 0; } to { transform: translateY(0) rotate(0); opacity: 1; } }
+  .card.red { color: #a11d1d; }
+  .card.black { color: #1a1a1a; }
+  .card.back { background: repeating-linear-gradient(45deg, #7a2d2d, #7a2d2d 6px, #5c1f1f 6px, #5c1f1f 12px); border-color: #3a1010; }
+  .felt-panel { display: flex; gap: 10px; justify-content: center; margin-top: 8px; }
+  .felt-panel input {
+    width: 90px; padding: 8px; border-radius: 5px; border: 1px solid var(--brass-dim);
+    background: #2a1c10; color: var(--lantern); text-align: center; font-size: 15px;
+  }
+  .banner {
+    text-align: center; font-size: 18px; padding: 10px; border-radius: 6px; margin-top: 12px;
+    font-weight: bold; opacity: 0; transition: opacity 300ms ease;
+  }
+  .banner.show { opacity: 1; }
+  .banner.win, .banner.blackjack { background: rgba(123,182,97,0.85); color: #10230a; }
+  .banner.lose, .banner.bust { background: rgba(161,61,61,0.85); }
+  .banner.push { background: rgba(201,154,82,0.85); color: #241708; }
+
+  /* ---------- controls ---------- */
+  #controls {
+    position: absolute; bottom: 0; left: 0; right: 0; z-index: 60;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 14px calc(14px + env(safe-area-inset-bottom, 0px)) 14px;
+    background: linear-gradient(0deg, rgba(0,0,0,0.55), transparent);
+    opacity: 1; transition: opacity 600ms ease;
+  }
+  #controls.faded { opacity: 0.12; }
+  #controls.faded:hover { opacity: 1; }
+
+  @media (max-width: 560px) {
+    .felt-table { padding: 16px; }
+    .card { width: 42px; height: 60px; font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="glow"></div>
+  <div id="brand">ELITE <span>DEVELOPMENT</span></div>
+
+  <div id="titleCard">
+    <h1>Saloon Poker</h1>
+    <div class="sub">a demo reel — press play and start recording</div>
+    <div class="actions">
+      <button class="btn" id="playBtn">Play Demo</button>
+    </div>
+  </div>
+
+  <div class="prompt" id="tablePrompt">Press <kbd>E</kbd> to play Valentine Saloon</div>
+
+  <div class="panel-wrap" id="panelWrap">
+    <div class="felt-table">
+      <div class="felt-hud">
+        <div><span class="label">Cash</span>$<span id="balance">500</span></div>
+        <div><span class="label">Bet</span>$<span id="bet">0</span></div>
+      </div>
+      <div class="hand-label">DEALER <span id="dealerTotal"></span></div>
+      <div class="cards" id="dealerCards"></div>
+      <div class="hand-label">YOU <span id="playerTotal"></span></div>
+      <div class="cards" id="playerCards"></div>
+
+      <div class="felt-panel" id="betPanel">
+        <input id="betInput" type="number" value="50" min="5" max="500" step="5">
+        <button class="btn small" id="placeBet">Place Bet</button>
+      </div>
+      <div class="felt-panel hidden" id="actionPanel">
+        <button class="btn small" id="hitBtn">Hit</button>
+        <button class="btn small" id="standBtn">Stand</button>
+        <button class="btn small" id="doubleBtn">Double</button>
+      </div>
+      <div class="banner" id="banner"></div>
+    </div>
+  </div>
+
+  <div id="controls">
+    <button class="btn ghost small" id="restartBtn">Restart</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var timers = [];
+  function after(ms, fn){ var t = setTimeout(fn, ms); timers.push(t); return t; }
+  function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
+
+  var balance = 500, bet = 0, playerHand = [], dealerHand = [];
+  var balanceEl = document.getElementById('balance');
+  var betEl = document.getElementById('bet');
+  var playerCardsEl = document.getElementById('playerCards');
+  var dealerCardsEl = document.getElementById('dealerCards');
+  var playerTotalEl = document.getElementById('playerTotal');
+  var dealerTotalEl = document.getElementById('dealerTotal');
+  var betPanel = document.getElementById('betPanel');
+  var actionPanel = document.getElementById('actionPanel');
+  var banner = document.getElementById('banner');
+  var suitSymbols = { hearts:'♥', diamonds:'♦', clubs:'♣', spades:'♠' };
+
+  function handTotal(hand){
+    var total = 0, aces = 0;
+    hand.forEach(function(c){
+      if (c.rank === 'A'){ aces++; total += 11; }
+      else if (['J','Q','K'].indexOf(c.rank) !== -1) total += 10;
+      else total += parseInt(c.rank, 10);
+    });
+    while (total > 21 && aces > 0){ total -= 10; aces--; }
+    return total;
+  }
+  function renderCard(container, card){
+    var div = document.createElement('div');
+    if (card.hidden){ div.className = 'card back'; }
+    else {
+      var red = card.suit === 'hearts' || card.suit === 'diamonds';
+      div.className = 'card ' + (red ? 'red' : 'black');
+      div.textContent = card.rank + suitSymbols[card.suit];
+    }
+    container.appendChild(div);
+  }
+  function render(hideHole){
+    balanceEl.textContent = balance;
+    betEl.textContent = bet;
+    playerCardsEl.innerHTML = '';
+    dealerCardsEl.innerHTML = '';
+    playerHand.forEach(function(c){ renderCard(playerCardsEl, c); });
+    if (hideHole && dealerHand.length){
+      renderCard(dealerCardsEl, dealerHand[0]);
+      renderCard(dealerCardsEl, { hidden: true });
+    } else {
+      dealerHand.forEach(function(c){ renderCard(dealerCardsEl, c); });
+    }
+    playerTotalEl.textContent = playerHand.length ? '(' + handTotal(playerHand) + ')' : '';
+    dealerTotalEl.textContent = (!hideHole && dealerHand.length) ? '(' + handTotal(dealerHand) + ')' : '';
+  }
+  function showBanner(text, cls){ banner.textContent = text; banner.className = 'banner show ' + cls; }
+  function resetUI(){
+    playerHand = []; dealerHand = []; bet = 0; balance = 500;
+    betPanel.classList.remove('hidden'); actionPanel.classList.add('hidden');
+    banner.classList.remove('show'); render(false);
+  }
+
+  function buildDemoShoe(){
+    return [
+      { rank:'A', suit:'spades' }, { rank:'10', suit:'hearts' },
+      { rank:'K', suit:'clubs' }, { rank:'7', suit:'diamonds' }
+    ];
+  }
+  function placeBet(amount){
+    if (balance < amount) return;
+    balance -= amount; bet = amount;
+    var shoe = buildDemoShoe();
+    playerHand = [shoe[0], shoe[1]];
+    dealerHand = [shoe[2], shoe[3]];
+    render(true);
+    if (handTotal(playerHand) === 21){ after(700, resolve); }
+    else { betPanel.classList.add('hidden'); actionPanel.classList.remove('hidden'); }
+  }
+  function resolve(){
+    var pTotal = handTotal(playerHand), dTotal = handTotal(dealerHand);
+    var pBJ = pTotal === 21 && playerHand.length === 2;
+    var dBJ = dTotal === 21 && dealerHand.length === 2;
+    var outcome, payout;
+    if (pBJ && !dBJ){ outcome = 'blackjack'; payout = bet + Math.floor(bet * 1.5); }
+    else if (dBJ && !pBJ){ outcome = 'lose'; payout = 0; }
+    else if (dTotal > 21 || pTotal > dTotal){ outcome = 'win'; payout = bet * 2; }
+    else if (pTotal === dTotal){ outcome = 'push'; payout = bet; }
+    else { outcome = 'lose'; payout = 0; }
+    if (payout > 0) balance += payout;
+    render(false); actionPanel.classList.add('hidden');
+    var messages = {
+      blackjack: 'Blackjack! You win $' + payout + '!',
+      win: 'You win $' + payout + '!',
+      lose: 'Dealer wins.',
+      push: 'Push — bet returned.'
+    };
+    showBanner(messages[outcome], outcome);
+  }
+
+  document.getElementById('placeBet').addEventListener('click', function(){
+    placeBet(parseInt(document.getElementById('betInput').value, 10) || 25);
+  });
+  document.getElementById('hitBtn').addEventListener('click', function(){
+    var ranks = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+    var suits = ['hearts','diamonds','clubs','spades'];
+    playerHand.push({ rank: ranks[Math.floor(Math.random()*ranks.length)], suit: suits[Math.floor(Math.random()*suits.length)] });
+    render(true);
+    if (handTotal(playerHand) > 21){ actionPanel.classList.add('hidden'); showBanner('Bust! You lose.', 'bust'); }
+  });
+  document.getElementById('standBtn').addEventListener('click', resolve);
+  document.getElementById('doubleBtn').addEventListener('click', function(){
+    if (balance < bet) return;
+    balance -= bet; bet *= 2; resolve();
+  });
+
+  function runDemo(){
+    resetUI();
+    document.getElementById('tablePrompt').classList.add('show');
+    var wrap = document.getElementById('panelWrap');
+    after(1600, function(){
+      document.getElementById('tablePrompt').classList.remove('show');
+      wrap.classList.add('show');
+    });
+    after(2600, function(){ placeBet(50); });
+  }
+
+  document.getElementById('playBtn').addEventListener('click', function(){
+    document.getElementById('titleCard').classList.add('hide');
+    document.getElementById('controls').classList.add('faded');
+    runDemo();
+  });
+  document.getElementById('restartBtn').addEventListener('click', function(){
+    clearTimers();
+    document.getElementById('panelWrap').classList.remove('show');
+    document.getElementById('tablePrompt').classList.remove('show');
+    document.getElementById('controls').classList.remove('faded');
+    document.getElementById('titleCard').classList.remove('hide');
+  });
+})();
+</script>
+</body>
+</html>
