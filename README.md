@@ -27,12 +27,6 @@ Built and maintained by **Elite Development**.
 - 📍 **Multiple tables** — add as many saloon locations as you want in one config array.
 - 🎨 **Western-themed NUI** — a styled felt-table UI (see the demo reel below) built with plain HTML/CSS/JS, no frameworks required.
 
-## Live Demo Reel
-
-The `docs/` folder contains a standalone, self-playing demo (`index.html`) of the table UI — no RedM required to preview it. It's meant to be screen-recorded for showcase clips.
-
-Once this repo is pushed to GitHub, turn on **GitHub Pages** (see [Publishing the demo](#publishing-the-demo-with-github-pages) below) and this link will go live for anyone to click and preview in a browser.
-
 ## Requirements
 
 - A running RedM server (`cerulean` fxmanifest / `rdr3` build)
@@ -100,12 +94,12 @@ Once you've uploaded this repo to GitHub:
 
 Questions, bug reports, or feature requests — reach out on Discord: **[Elite Development](https://discord.com/users/1162977745400254575)**
 
-> Note: that link opens a personal Discord profile, not a server invite. If you'd like people to be able to join a support server (rather than needing to already share a server with you or send a friend request), create a Discord server and use its `discord.gg/...` invite link instead — happy to help you swap it in.
-
+> Note: that link opens a personal Discord profile, not a server invite.
+> 
 ## License
 
 Released under the [MIT License](LICENSE) — free to use, modify, and redistribute, including in commercial servers, with attribution.
 
 ---
 
-<p align="center">Made with 🤠 by Elite Development</p>
+<p align="center">Made with Love by Elite Development</p>
