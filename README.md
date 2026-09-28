@@ -6,7 +6,7 @@
 <p align="center"><b>Server-authoritative saloon Blackjack for RedM</b></p>
 
 <p align="center">
-  <a href="#">Live Demo Reel</a> ·
+  <a href="#">[Live Demo Reel](https://elite-development-services.github.io/ELiTE-saloon-poker/)</a> ·
   <a href="#installation">Installation</a> ·
   <a href="#configuration">Configuration</a> ·
   <a href="#support">Support</a>
