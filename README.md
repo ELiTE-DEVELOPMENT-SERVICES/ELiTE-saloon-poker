@@ -6,12 +6,11 @@
 <p align="center"><b>Server-authoritative saloon Blackjack for RedM</b></p>
 
 <p align="center">
-  <a href="#">[Live Demo Reel](https://elite-development-services.github.io/ELiTE-saloon-poker/)</a> ·
   <a href="#installation">Installation</a> ·
   <a href="#configuration">Configuration</a> ·
   <a href="#support">Support</a>
 </p>
-
+ <a href="https://elite-development-services.github.io/ELiTE-saloon-poker/"> <img src="https://img.shields.io/badge/🎬%20LIVE%20DEMO-Play%20Now-8B4513?style=for-the-badge" alt="Live Demo"> </a>
 ---
 
 **saloon-poker** drops a fully playable Blackjack table into any saloon in your RedM world. Players walk up to a table, press **E**, place a bet, and play a classic hit/stand/double hand against an NPC dealer — all resolved on the server so results can't be tampered with client-side.
