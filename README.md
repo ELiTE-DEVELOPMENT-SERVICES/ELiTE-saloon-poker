@@ -80,25 +80,15 @@ By default the script uses a simple in-memory wallet so it works immediately for
 4. **Hit**, **Stand**, or **Double** — standard Blackjack rules apply.
 5. Dealer stands on 17. A natural blackjack pays 3:2 by default.
 
-## Publishing the demo with GitHub Pages
-
-Once you've uploaded this repo to GitHub:
-
-1. Go to your repo's **Settings** tab.
-2. In the left sidebar, click **Pages**.
-3. Under "Build and deployment," set **Source** to `Deploy from a branch`.
-4. Set **Branch** to `main` and the folder to `/docs`, then click **Save**.
-5. After a minute, GitHub will give you a live link like `https://yourusername.github.io/saloon-poker/` — that's your playable demo reel, shareable anywhere.
 
 ## Support
 
 Questions, bug reports, or feature requests — reach out on Discord: **[Elite Development](https://discord.com/users/1162977745400254575)**
 
-> Note: that link opens a personal Discord profile, not a server invite.
-> 
+
 ## License
 
-Released under the [MIT License](LICENSE) — free to use, modify, and redistribute, including in commercial servers, with attribution.
+Released under the [MIT License](LICENSE) — free to use, modify and redistribute, including in commercial servers, with attribution.
 
 ---
 
